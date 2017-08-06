@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+	<head>
+		<style type="text/css">
+ 			body{	
+        overflow:hidden;
+			  background-image: url(asshole.gif);
+				background-position: center center; 
+				background-repeat: no-repeat; 
+				background-attachment: fixed;
+				background-size: cover; 
+			}	
+		</style>
+    <title>million versus</title>
+	</head>
+	<body></body>
+	<script>
+		var sW=window.innerWidth/2;
+		var sH=window.innerHeight/2;
+		var moveleft=0,moveup=0;
+
+    var sq=document.createElement("div");
+    document.body.appendChild(sq);
+    Object.assign(sq.style,{
+      left: "0px",
+      top: "0px",
+      width: "100px",
+      height: "100px",
+      background: "rgb(255,0,0)",
+      position: "absolute",
+    });
+
+    rnd=(a)=>Math.floor(Math.random()*a);
+		var rgb=[];
+    rgb_rnd=()=>{ for(let i=0;i<3;i++)rgb[i]=rnd(255); }
+
+		var sqW=100,sqH=100;
+		var timer=0;
+    let intId;
+
+		var once=0;
+    var blocks=[];
+		document.onkeydown=()=>{
+      let x,y;
+      {
+        var a=sq.getBoundingClientRect();	
+        x=a.left;
+        y=a.top;
+      }
+
+			if(once==0 && ( sW>x&&(sW-90)<x&&sH>y&&(sH-90)<y) ){
+				once=1;
+        intId=setInterval(()=>{
+          rgb_rnd();
+          sq.style.background="rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
+          if(timer%2){
+            sqW-=6; sq.style.width=sqW+"px";
+            moveleft+=4; sq.style.left=moveleft+"px";
+          }else{ 
+            sqH-=6; sq.style.height=sqH+"px";
+            moveup+=4; sq.style.top=moveup+"px";
+          }
+
+          if(timer!=30){ timer+=1; return; }
+
+          clearInterval(intId);
+          sq.style.width="0px";
+          sq.style.height="0px";
+
+          document.body.style.backgroundImage="url(asshole.jpg)";
+
+          for(let i=0;i<100;i++){
+            let block=document.createElement("div");
+            rgb_rnd();
+            let w=rnd(160)+1;
+            let h=rnd(160)+1;
+            let x=rnd(sW*2-w);
+            let y=rnd(sH*2-h);
+            Object.assign(block.style,{
+              background: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")",
+              width: w+"px",
+              height: h+"px",
+              left: x+"px",
+              top: y+"px",
+              position: "absolute",
+            });
+            document.body.appendChild(block);
+            blocks.push({ el:block,x:x,y:y,w:w,h:h, });
+          }
+        },100);
+			}
+
+      let blah=(a,b,c)=>{
+        blocks.forEach((d)=>{
+          d[b]+=a;
+          d.el.style[c]=d[b]+'px';
+        });
+      };
+
+      switch(event.keyCode){
+        case 39: moveleft+=60; blah(60,'x','left'); break;
+        case 37: moveleft-=60; blah(-60,'x','left'); break;
+        case 38: moveup-=60; blah(-60,'y','top'); break;
+        case 40: moveup+=60; blah(60,'y','top'); break;
+        case 49: rgb_rnd(); break;
+      }
+      Object.assign(sq.style,{
+        background: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")",
+        left: moveleft+"px",
+        top: moveup+"px",
+      });
+		};
+
+/*
+            background:"rgb(0,0,0)",
+            width:"0px",
+            height:"0px",
+            top:"0px",
+            left:"0px",
+            position:"relative",
+            border:"0px",
+            padding:"0px",
+            margin:"0px",
+            boxSizing:"border-box"	
+*/
+		/* <p id="demo" style="background-color:white"></p> */
+	</script>	
+</html>
